@@ -1,3 +1,5 @@
+using Portfolio_API;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string? jwtSecret = builder.Configuration.GetValue<string>("JwtSecret");
@@ -8,6 +10,7 @@ if(jwtSecret is null || dbStringConnection is null){
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ILoginService, LoginService>();
 
 var app = builder.Build();
 
