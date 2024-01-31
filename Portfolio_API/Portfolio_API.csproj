@@ -25,7 +25,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\DTOs\" />
+    <Folder Include="Data\DTOs\Lang\" />
+    <Folder Include="Data\DTOs\User\" />
+    <Folder Include="Models\Job\" />
+    <Folder Include="Models\Lang\" />
+    <Folder Include="Models\User\" />
   </ItemGroup>
 
 </Project>
