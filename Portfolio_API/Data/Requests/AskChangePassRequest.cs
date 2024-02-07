@@ -2,10 +2,8 @@
 
 namespace Portfolio_API;
 
-public class LoginRequest
+public class AskChangePassRequest
 {
     [Required]
     public string? Email { get; set; }
-    [Required]
-    public string? Password { get; set; }
 }

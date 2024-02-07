@@ -2,8 +2,8 @@
 
 namespace Portfolio_API;
 
-public class AskPassResetRequest
-{
+public class CreateLangDTO
+{   
     [Required]
-    public string? Email { get; set; }
+    public string? Name { get; set; }
 }

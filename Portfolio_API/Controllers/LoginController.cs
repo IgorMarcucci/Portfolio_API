@@ -20,35 +20,29 @@ public class LoginController : Controller
     public IActionResult GetUserByIdAsync(int id)
     {
         ReadUserDto? readDto = _loginService.GetUserById(id);
-        if (readDto != null)
-        {
-            return Ok(readDto);
-        }
-        return NotFound();
+        return readDto != null ? Ok(readDto) : NotFound();
     }
 
     [HttpPost]
-    public IActionResult LoginUser(LoginRequest request)
+    public IActionResult Login(LoginRequest request)
     {
-        Result result = _loginService.LoginUser(request);
-        if (result.IsFailed) return Unauthorized(result);
-        return Ok(result);
+        return HandleResult(_loginService.Login(request));
     }
 
-    [HttpPost("/ask-passreset")]
-    public IActionResult AskPasswordReset(AskPassResetRequest request)
+    [HttpPost("/ask-change-pass")]
+    public IActionResult AskChangePass(AskChangePassRequest request)
     {
-        Result result = _loginService.AskPasswordReset(request);
-        if (result.IsFailed) return Unauthorized(result);
-
-        return Ok(result);
+        return HandleResult(_loginService.AskChangePass(request));
     }
 
-    [HttpPost("/do-passreset")]
-    public IActionResult ResetPassword(DoPassResetRequest request)
+    [HttpPost("/change-pass")]
+    public IActionResult ChangePass(ChangePassRequest request)
     {
-        Result result = _loginService.ResetPassword(request);
-        if (result.IsFailed) return Unauthorized(result);
-        return Ok(result);
+        return HandleResult(_loginService.ChangePass(request));
+    }
+
+    private IActionResult HandleResult(Result result)
+    {
+        return result.IsFailed ? Unauthorized(result) : Ok(result);
     }
 }

@@ -1,24 +1,31 @@
 using Microsoft.AspNetCore.Identity;
 using Portfolio_API;
-
 var builder = WebApplication.CreateBuilder(args);
 
-string? jwtSecret = builder.Configuration.GetValue<string>("JwtSecret");
-string? dbStringConnection = builder.Configuration.GetValue<string>("DbContext");
-if(jwtSecret is null || dbStringConnection is null){
-    throw new ArgumentNullException("Some env variable is null. Check your configuration");
-}
+string jwtPass = builder.Configuration.GetValue<string>("JwtPass")
+    ?? throw new ArgumentNullException("JwtPass not found");
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddIdentity<IdentityUser<int>, IdentityRole<int>>()
-    .AddEntityFrameworkStores<UserDbContext>()
+string dbConnection = builder.Configuration.GetValue<string>("DbContext")
+    ?? throw new ArgumentNullException("DbContext not found");
+
+builder.Services
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
+    .AddIdentity<IdentityUser<int>, IdentityRole<int>>(options =>
+    {
+        options.SignIn.RequireConfirmedEmail = true;
+    })
+    .AddEntityFrameworkStores<ApplicationDatabaseContext>()
     .AddDefaultTokenProviders();
-builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IRegisterService, RegisterService>();
-builder.Services.AddControllers();
+
+builder.Services
+    .AddScoped<IUserService, UserService>()
+    .AddScoped<ILoginService, LoginService>()
+    .AddScoped<ITokenService, TokenService>()
+    .AddScoped<IEmailService, EmailService>()
+    .AddScoped<IRegisterService, RegisterService>()
+    .AddScoped<IJobService, JobService>()
+    .AddControllers();
 
 var app = builder.Build();
 

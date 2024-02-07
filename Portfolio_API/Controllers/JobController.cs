@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Portfolio_API;
@@ -21,6 +22,7 @@ public class JobController : ControllerBase
         return Ok(jobsDTO);
     }
 
+    [Authorize]
     [HttpGet("/job/{id}")]
     public async Task<IActionResult> GetJobByIdAsync(int id)
     {
@@ -30,15 +32,17 @@ public class JobController : ControllerBase
         return Ok(jobDTO);
     }
 
+    [Authorize]
     [HttpPost("/createjob")]
     public IActionResult CreateJobAsync([FromBody] CreateJobDTO createJobDTO)
     {
-        Result result = _jobService.CreateJobAsync(createJobDTO).Result;
+        Result result = _jobService.CreateJobAsync(createJobDTO);
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);
     }
 
+    [Authorize]
     [HttpPut("/updatejob/{id}")]
     public IActionResult UpdateJobAsync(int id, [FromBody] UpdateJobDTO updateJobDTO)
     {
@@ -48,6 +52,7 @@ public class JobController : ControllerBase
         return BadRequest(result);
     }
 
+    [Authorize]
     [HttpDelete("/deletejob/{id}")]
     public IActionResult DeleteJobAsync(int id)
     {

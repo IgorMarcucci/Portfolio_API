@@ -3,8 +3,8 @@
 namespace Portfolio_API;
 public interface ILoginService
 {
-    public Result LoginUser(LoginRequest request);
-    public Result AskPasswordReset(AskPassResetRequest request);
-    public Result ResetPassword(DoPassResetRequest request);
+    public Result Login(LoginRequest request);
+    public Result AskChangePass(AskChangePassRequest request);
+    public Result ChangePass(ChangePassRequest request);
     public ReadUserDto? GetUserById(int id);
 }

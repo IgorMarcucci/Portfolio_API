@@ -18,31 +18,21 @@ public class UserService : IUserService
 
     public async Task<List<ReadUserDto>>? GetUsers()
     {
-        List<IdentityUser<int>> users = await _userManager.Users.ToListAsync();
-        if (users == null || !users.Any())
-            return null;
-        
-        List<ReadUserDto> usersDto = _mapper.Map<List<ReadUserDto>>(users);
-        foreach (var user in usersDto)
-        {
-            var identityUser = await _userManager.FindByIdAsync(user.Id.ToString());
-            if (identityUser == null)
-                continue;
-            
-        }
-        return usersDto;
+        var users = await _userManager.Users.ToListAsync();
+        return users?.Count > 0 ? _mapper.Map<List<ReadUserDto>>(users) : null;
     }
+
     public async Task<Result> UpdateUserAsync(int id, UpdateUserDto updateUserDto)
     {
-        IdentityUser<int>? user = await _userManager.FindByIdAsync(id.ToString());
-        if (user != null)
+        var user = await _userManager.FindByIdAsync(id.ToString());
+        if (user == null)
         {
-            _mapper.Map(updateUserDto, user);
-            var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
-                return Result.Ok();
+            return Result.Fail("User not found!");
         }
-        return Result.Fail("Falha ao confirmar email!");
+
+        _mapper.Map(updateUserDto, user);
+        var result = await _userManager.UpdateAsync(user);
+        return result.Succeeded ? Result.Ok() : Result.Fail("Failed to confirm email!");
     }
 
 }

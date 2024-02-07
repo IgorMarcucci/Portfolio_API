@@ -7,9 +7,11 @@ namespace Portfolio_API
         public static WebApplication MigrateDatabase(this WebApplication app)
         {
             using var scope = app.Services.CreateScope();
+            var serviceProvider = scope.ServiceProvider;
+
             try
             {
-                var context = scope.ServiceProvider.GetRequiredService<DbContext>();
+                var context = serviceProvider.GetRequiredService<DbContext>();
                 context.Database.Migrate();
             }
             catch (Exception ex)
@@ -17,6 +19,7 @@ namespace Portfolio_API
                 Console.WriteLine(ex.Message);
                 throw;
             }
+
             return app;
         }
     }

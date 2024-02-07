@@ -1,7 +1,6 @@
 ﻿namespace Portfolio_API;
 
-public class LangModel
+public class UpdateLangDTO
 {
-    public int Id { get; set; }
     public string? Name { get; set; }
 }

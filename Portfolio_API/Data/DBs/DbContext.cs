@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace Portfolio_API;
 
-public class UserDbContext : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>
+public class ApplicationDatabaseContext : DbContext, IDbContext
 {
-    public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
+    public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> opt) : base(opt)
     {
 
     }
@@ -33,5 +34,14 @@ public class UserDbContext : IdentityDbContext<IdentityUser<int>, IdentityRole<i
 
             builder.Entity<IdentityUser<int>>().HasData(admin);
 
+            builder.Entity<UserModel>()
+                .HasMany(u => u.Jobs);
+            
+            builder.Entity<JobModel>()
+                .HasMany(j => j.Langs);
+
         }
+
+    public DbSet<JobModel> Jobs { get; set; }
+    public DbSet<LangModel> Langs { get; set; }
 }

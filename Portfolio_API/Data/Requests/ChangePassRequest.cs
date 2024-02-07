@@ -2,7 +2,7 @@
 
 namespace Portfolio_API;
 
-public class DoPassResetRequest
+public class ChangePassRequest
 {
     [Required]
     [DataType(DataType.Password)]

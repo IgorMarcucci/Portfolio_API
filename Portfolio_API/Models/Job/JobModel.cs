@@ -1,4 +1,5 @@
-﻿using AutoMapper.Configuration.Annotations;
+﻿using System.Text.Json.Serialization;
+using AutoMapper.Configuration.Annotations;
 
 namespace Portfolio_API;
 
@@ -11,6 +12,6 @@ public class JobModel
     public string? StartDate { get; set; }
     public string? EndDate { get; set; }
     public string? Description { get; set; }
-    [Ignore]
+    [JsonIgnore]
     public LangModel[]? Langs { get; set; }
 }

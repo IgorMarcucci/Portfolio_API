@@ -25,30 +25,26 @@ public class LoginService : ILoginService
         _configuration = configuration;
     }
 
-    public Result LoginUser(LoginRequest request)
+    public Result Login(LoginRequest request)
     {
 
-        string? jwtSecret = _configuration.GetValue<string>("JwtSecret");
-        if(jwtSecret is null)
-        {
-            throw new ArgumentNullException("JwtSecret is null. Check your configuration");
-        }
+        string jwtPass = _configuration.GetValue<string>("JwtPass")
+            ?? throw new ArgumentNullException("JwtPass not found");
 
         var identityResult = _signInManager
-            .PasswordSignInAsync(request.Username, request.Password, false, false);
+            .PasswordSignInAsync(request.Email, request.Password, false, false);
         if (identityResult.Result.Succeeded)
         {
             IdentityUser<int>? identityUser = _signInManager.
-                UserManager.Users.FirstOrDefault(u => u.NormalizedUserName
-                == request.Username.ToUpper());
-            TokenModel? token = _tokenService.CreateToken(identityUser, jwtSecret);
-            Console.WriteLine(token.Value);
+                UserManager.Users.FirstOrDefault(u => u.Email
+                == request.Email);
+            TokenModel? token = _tokenService.CreateToken(identityUser, jwtPass);
             return Result.Ok().WithSuccess(token.Value);
         }
         return Result.Fail("Login falhou");
     }
 
-    public Result AskPasswordReset(AskPassResetRequest request)
+    public Result AskChangePass(AskChangePassRequest request)
     {
         IdentityUser<int> identityUser = GetUserByEmail(request.Email);
 
@@ -63,7 +59,7 @@ public class LoginService : ILoginService
         return Result.Fail("Falha ao solicitar redefinição");
     }
 
-    public Result ResetPassword(DoPassResetRequest request)
+    public Result ChangePass(ChangePassRequest request)
     {
         IdentityUser<int>? identityUser = GetUserByEmail(request.Email);
 
