@@ -7,17 +7,19 @@ namespace Portfolio_API;
 
 public class ApplicationDatabaseContext : DbContext, IDbContext
 {
-    public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> opt) : base(opt)
-    {
 
+    private IConfiguration _configuration;
+
+    public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> opt, IConfiguration configuration) : base(opt)
+    {
+        _configuration = configuration;
     }
     
     protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            var webApplicationBuilder = WebApplication.CreateBuilder();
-            string? adminEmail = webApplicationBuilder.Configuration.GetValue<string>("adminEmail");;
-            string? adminPassword = webApplicationBuilder.Configuration.GetValue<string>("adminPassword");;
+            string? adminEmail = _configuration.GetValue<string>("adminEmail");;
+            string? adminPassword = _configuration.GetValue<string>("adminPassword");;
 
             IdentityUser<int> admin = new IdentityUser<int>
             {
