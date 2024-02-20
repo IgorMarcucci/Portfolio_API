@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Portfolio_API;
@@ -11,9 +12,11 @@ using Portfolio_API;
 namespace Portfolio_API.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    partial class ApplicationDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240208005628_ChangeUserModel")]
+    partial class ChangeUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,15 +141,15 @@ namespace Portfolio_API.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "70d74984-b04f-4630-aad2-9759eee05634",
+                            ConcurrencyStamp = "98c65a23-1017-441b-94ab-386eebc923ed",
                             Email = "igormarcucci1@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "IGORMARCUCCI1@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBoWniaia6wl+KeY0V3719mX7SzB3q/5hZ3RMB+mEiNbTPnBz4MXq2l8FOYsP/ZBHQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJr5ojdEgsVFbIcyQhyDWIgzVPyODDbuPJBcac5XG4b3iMKp2a9pf8UDpOzcdc9rWw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e3348c3b-3af4-4de9-8edb-fdd617771c0e",
+                            SecurityStamp = "fc2d3383-7de5-4e15-adca-04bec72ceb61",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });

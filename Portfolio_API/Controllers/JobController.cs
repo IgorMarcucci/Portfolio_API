@@ -34,9 +34,9 @@ public class JobController : ControllerBase
 
     [Authorize]
     [HttpPost("/createjob")]
-    public IActionResult CreateJobAsync([FromBody] CreateJobDTO createJobDTO)
+    public async Task<IActionResult> CreateJobAsync([FromBody] CreateJobDTO createJobDTO)
     {
-        Result result = _jobService.CreateJobAsync(createJobDTO);
+        Result result = await _jobService.CreateJobAsync(createJobDTO);
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);

@@ -24,11 +24,10 @@ builder.Services
 
 builder.Services
     .AddScoped<IUserService, UserService>()
-    .AddScoped<ILoginService, LoginService>()
     .AddScoped<ITokenService, TokenService>()
     .AddScoped<IEmailService, EmailService>()
-    .AddScoped<IRegisterService, RegisterService>()
     .AddScoped<IJobService, JobService>()
+    .AddScoped<ILangService, LangService>()
     .AddControllers();
 
 builder.Services.AddHttpClient();

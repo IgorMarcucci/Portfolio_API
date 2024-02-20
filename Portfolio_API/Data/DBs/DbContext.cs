@@ -21,7 +21,7 @@ public class ApplicationDatabaseContext : DbContext, IDbContext
             string? adminEmail = _configuration.GetValue<string>("adminEmail");;
             string? adminPassword = _configuration.GetValue<string>("adminPassword");;
 
-            IdentityUser<int> admin = new IdentityUser<int>
+            UserModel admin = new UserModel
             {
                 UserName = "admin",
                 NormalizedUserName = "ADMIN",
@@ -31,10 +31,10 @@ public class ApplicationDatabaseContext : DbContext, IDbContext
                 SecurityStamp = Guid.NewGuid().ToString(),
                 Id = 2,
             };
-            PasswordHasher<IdentityUser<int>> hasher = new PasswordHasher<IdentityUser<int>>();
+            PasswordHasher<UserModel> hasher = new PasswordHasher<UserModel>();
             admin.PasswordHash = hasher.HashPassword(admin, adminPassword);
 
-            builder.Entity<IdentityUser<int>>().HasData(admin);
+            builder.Entity<UserModel>().HasData(admin);
 
             builder.Entity<UserModel>()
                 .HasMany(u => u.Jobs);
@@ -43,7 +43,7 @@ public class ApplicationDatabaseContext : DbContext, IDbContext
                 .HasMany(j => j.Langs);
 
         }
-
+    public DbSet<UserModel> Users { get; set; }
     public DbSet<JobModel> Jobs { get; set; }
     public DbSet<LangModel> Langs { get; set; }
 }

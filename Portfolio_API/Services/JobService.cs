@@ -7,7 +7,7 @@ namespace Portfolio_API;
 public class JobService : IJobService
 {
     private readonly ApplicationDatabaseContext _db;
-    private IMapper _mapper;
+    private readonly IMapper _mapper;
 
     public JobService(ApplicationDatabaseContext db, IMapper mapper)
     {
@@ -24,11 +24,11 @@ public class JobService : IJobService
         return listJobs;
     }
 
-    public Result CreateJobAsync(CreateJobDTO createJobDTO)
+    public async Task<Result> CreateJobAsync(CreateJobDTO createJobDTO)
     {
         JobModel job = _mapper.Map<JobModel>(createJobDTO);
         _db.Jobs.Add(job);
-        _db.SaveChangesAsync();
+        await _db.SaveChangesAsync();
         return Result.Ok();
     }
 
@@ -41,7 +41,7 @@ public class JobService : IJobService
         }
 
         _mapper.Map(updateJobDTO, job);
-        _db.SaveChangesAsync();
+        await _db.SaveChangesAsync();
         return Result.Ok();
     }
 
@@ -54,7 +54,7 @@ public class JobService : IJobService
         }
 
         _db.Jobs.Remove(job);
-        _db.SaveChangesAsync();
+        await _db.SaveChangesAsync();
         return Result.Ok();
     }
 

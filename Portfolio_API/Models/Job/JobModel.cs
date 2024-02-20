@@ -13,5 +13,5 @@ public class JobModel
     public string? EndDate { get; set; }
     public string? Description { get; set; }
     [JsonIgnore]
-    public LangModel[]? Langs { get; set; }
+    public virtual List<LangModel>? Langs { get; set; }
 }
