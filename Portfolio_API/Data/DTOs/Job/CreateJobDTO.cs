@@ -2,7 +2,7 @@
 
 namespace Portfolio_API;
 
-public class CreateJobDTO
+public class CreateJobDto
 {
     [Required]
     public string? Title { get; set; }
@@ -11,8 +11,10 @@ public class CreateJobDTO
     [Required]
     public string? Location { get; set; }
     [Required]
-    public string? StartDate { get; set; }
-    public string? EndDate { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
     [Required]
     public string? Description { get; set; }
+    [Required]
+    public int UserId { get; set; }
 }

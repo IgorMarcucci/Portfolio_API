@@ -7,7 +7,7 @@ namespace Portfolio_API;
 public class LangService : ILangService
 {
     private readonly ApplicationDatabaseContext _db;
-    private IMapper _mapper;
+    private readonly IMapper _mapper;
 
     public LangService(ApplicationDatabaseContext db, IMapper mapper)
     {
@@ -15,24 +15,24 @@ public class LangService : ILangService
         _mapper = mapper;
     }
 
-    public async Task<List<ReadLangDTO>>? GetLangs()
+    public async Task<List<ReadLangDto>>? GetLangs()
     {
         List<LangModel> langs = await _db.Langs.ToListAsync();
 
-        List<ReadLangDTO> listLangs = _mapper.Map<List<ReadLangDTO>>(langs);
+        List<ReadLangDto> listLangs = _mapper.Map<List<ReadLangDto>>(langs);
 
         return listLangs;
     }
 
-    public async Task<Result> CreateLangAsync(CreateLangDTO createLangDTO)
+    public async Task<Result> CreateLangAsync(CreateLangDto createLangDto)
     {
-        LangModel lang = _mapper.Map<LangModel>(createLangDTO);
+        LangModel lang = _mapper.Map<LangModel>(createLangDto);
         _db.Langs.Add(lang);
         await _db.SaveChangesAsync();
         return Result.Ok();
     }
 
-    public async Task<Result> UpdateLangAsync(int id, UpdateLangDTO updateLangDTO)
+    public async Task<Result> UpdateLangAsync(int id, UpdateLangDto updateLangDto)
     {
         LangModel lang = await _db.Langs.FindAsync(id);
         if (lang == null)
@@ -40,7 +40,7 @@ public class LangService : ILangService
             return Result.Fail("Lang not found!");
         }
 
-        _mapper.Map(updateLangDTO, lang);
+        _mapper.Map(updateLangDto, lang);
         await _db.SaveChangesAsync();
         return Result.Ok();
     }
@@ -58,7 +58,7 @@ public class LangService : ILangService
         return Result.Ok();
     }
 
-    public async Task<ReadLangDTO?> GetLangByIdAsync(int id)
+    public async Task<ReadLangDto?> GetLangByIdAsync(int id)
     {
         LangModel? lang = await _db.Langs.FindAsync(id);
         if (lang == null)
@@ -66,7 +66,7 @@ public class LangService : ILangService
             return null;
         }
 
-        ReadLangDTO readLangDTO = _mapper.Map<ReadLangDTO>(lang);
-        return readLangDTO;
+        ReadLangDto ReadLangDto = _mapper.Map<ReadLangDto>(lang);
+        return ReadLangDto;
     }
 }

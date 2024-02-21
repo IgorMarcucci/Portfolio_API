@@ -9,4 +9,5 @@ public class ReadUserDto
     public string? Email { get; set; }
     public string? NormalizedEmail { get; set; }
     public bool EmailConfirmed { get; set; }
+    public virtual List<JobModel>? Jobs { get; set; }
 }

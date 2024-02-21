@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Runtime.InteropServices;
+using AutoMapper;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,24 +16,39 @@ public class JobService : IJobService
         _mapper = mapper;
     }
 
-    public async Task<List<ReadJobDTO>>? GetJobs()
+    public async Task<List<ReadJobDto>>? GetJobs()
     {
-        List<JobModel> jobs = await _db.Jobs.Include(j => j.Langs).ToListAsync();
+        List<JobModel> jobs = await _db.Jobs.Include(j => j.Langs).Include(j => j.User).ToListAsync();
 
-        List<ReadJobDTO> listJobs = _mapper.Map<List<ReadJobDTO>>(jobs);
+        List<ReadJobDto> listJobs = _mapper.Map<List<ReadJobDto>>(jobs);
 
         return listJobs;
     }
 
-    public async Task<Result> CreateJobAsync(CreateJobDTO createJobDTO)
+    public async Task<Result> CreateJobAsync(CreateJobDto createJobDto)
     {
-        JobModel job = _mapper.Map<JobModel>(createJobDTO);
-        _db.Jobs.Add(job);
+        var user = _db.Users.Include(u => u.Jobs).FirstOrDefault(t => t.Id == createJobDto.UserId);
+        if (user == null)
+        {
+            return Result.Fail("User not found!");
+        }
+
+        var job = new JobModel
+        {
+            Title = createJobDto.Title,
+            Description = createJobDto.Description,
+            StartDate = createJobDto.StartDate,
+            Location = createJobDto.Location,
+            Company = createJobDto.Company,
+            UserId = createJobDto.UserId,
+            User = user
+        };
+        user.Jobs.Add(job);
         await _db.SaveChangesAsync();
         return Result.Ok();
     }
 
-    public async Task<Result> UpdateJobAsync(int id, UpdateJobDTO updateJobDTO)
+    public async Task<Result> UpdateJobAsync(int id, UpdateJobDto updateJobDto)
     {
         JobModel job = await _db.Jobs.FindAsync(id);
         if (job == null)
@@ -40,7 +56,7 @@ public class JobService : IJobService
             return Result.Fail("Job not found!");
         }
 
-        _mapper.Map(updateJobDTO, job);
+        _mapper.Map(updateJobDto, job);
         await _db.SaveChangesAsync();
         return Result.Ok();
     }
@@ -58,11 +74,25 @@ public class JobService : IJobService
         return Result.Ok();
     }
 
-    public async Task<ReadJobDTO?> GetJobByIdAsync(int id)
+    public async Task<ReadJobDto?> GetJobByIdAsync(int id)
     {
         JobModel job = await _db.Jobs.Include(j => j.Langs).FirstOrDefaultAsync(j => j.Id == id);
-        ReadJobDTO jobObject = _mapper.Map<ReadJobDTO>(job);
+        ReadJobDto jobObject = _mapper.Map<ReadJobDto>(job);
 
         return jobObject;
+    }
+
+    public async Task<Result> AddLangToJobAsync(int jobId, int langId)
+    {
+        JobModel job = await _db.Jobs.Include(j => j.Langs).FirstOrDefaultAsync(j => j.Id == jobId);
+        LangModel lang = await _db.Langs.FindAsync(langId);
+        if (job == null || lang == null)
+        {
+            return Result.Fail("Job or Lang not found!");
+        }
+
+        job.Langs.Add(lang);
+        await _db.SaveChangesAsync();
+        return Result.Ok();
     }
 }

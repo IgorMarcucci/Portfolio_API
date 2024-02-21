@@ -9,15 +9,15 @@ namespace Portfolio_API;
 public class UserService : IUserService
 {
     private readonly IMapper _mapper;
-    private readonly UserManager<IdentityUser<int>> _userManager;
+    private readonly UserManager<UserModel> _userManager;
     private readonly IEmailService _emailService;
     private readonly ITokenService _tokenService;
-    private readonly SignInManager<IdentityUser<int>> _signInManager;
+    private readonly SignInManager<UserModel> _signInManager;
     private readonly IConfiguration _configuration;
 
-    public UserService(IMapper mapper, UserManager<IdentityUser<int>> userManager,
+    public UserService(IMapper mapper, UserManager<UserModel> userManager,
         IEmailService emailService, ITokenService tokenService,
-        SignInManager<IdentityUser<int>> signInManager,
+        SignInManager<UserModel> signInManager,
         IConfiguration configuration)
     {
         _mapper = mapper;
@@ -30,8 +30,15 @@ public class UserService : IUserService
 
     public async Task<List<ReadUserDto>>? GetUsers()
     {
-        var users = await _userManager.Users.ToListAsync();
-        return users?.Count > 0 ? _mapper.Map<List<ReadUserDto>>(users) : null;
+         List<UserModel> users = await _userManager.Users
+                .Include(u => u.Jobs)
+                .ToListAsync();
+
+        if (users == null || !users.Any())
+            return null;
+
+        List<ReadUserDto> usersDto = _mapper.Map<List<ReadUserDto>>(users);
+        return usersDto;
     }
 
     public async Task<Result> UpdateUserAsync(int id, UpdateUserDto updateUserDto)
@@ -57,7 +64,7 @@ public class UserService : IUserService
             .PasswordSignInAsync(request.Email, request.Password, false, false);
         if (identityResult.Result.Succeeded)
         {
-            IdentityUser<int>? identityUser = _signInManager.
+            UserModel? identityUser = _signInManager.
                 UserManager.Users.FirstOrDefault(u => u.Email
                 == request.Email);
             TokenModel? token = _tokenService.CreateToken(identityUser, jwtPass);
@@ -68,7 +75,7 @@ public class UserService : IUserService
 
     public ReadUserDto? GetUserById(int id)
     {
-        IdentityUser<int>? identityUser = _signInManager.
+        UserModel? identityUser = _signInManager.
                 UserManager.Users.FirstOrDefault(u => u.Id == id);
 
         if (identityUser == null)
@@ -81,7 +88,7 @@ public class UserService : IUserService
 
     public Result RegisterUser(CreateUserDto createUserDto)
     {
-        IdentityUser<int> identityUser = _mapper.Map<IdentityUser<int>>(createUserDto);
+        UserModel identityUser = _mapper.Map<UserModel>(createUserDto);
 
         Task<IdentityResult> result = _userManager.CreateAsync(identityUser, createUserDto.Password);
 

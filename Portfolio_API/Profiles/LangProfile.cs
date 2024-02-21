@@ -6,8 +6,8 @@ public class LangProfile : Profile
 {
     public LangProfile()
     {
-        CreateMap<LangModel, ReadLangDTO>();
-        CreateMap<CreateLangDTO, LangModel>();
-        CreateMap<UpdateLangDTO, LangModel>();
+        CreateMap<LangModel, ReadLangDto>();
+        CreateMap<CreateLangDto, LangModel>();
+        CreateMap<UpdateLangDto, LangModel>();
     }
 }

@@ -6,8 +6,8 @@ public class JobProfile : Profile
 {
     public JobProfile()
     {
-        CreateMap<JobModel, ReadJobDTO>();
-        CreateMap<CreateJobDTO, JobModel>();
-        CreateMap<UpdateJobDTO, JobModel>();
+        CreateMap<JobModel, ReadJobDto>();
+        CreateMap<CreateJobDto, JobModel>();
+        CreateMap<UpdateJobDto, JobModel>();
     }
 }

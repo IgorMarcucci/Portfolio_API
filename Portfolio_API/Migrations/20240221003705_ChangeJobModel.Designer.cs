@@ -12,8 +12,8 @@ using Portfolio_API;
 namespace Portfolio_API.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    [Migration("20240207232937_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240221003705_ChangeJobModel")]
+    partial class ChangeJobModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,64 @@ namespace Portfolio_API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser<int>", b =>
+            modelBuilder.Entity("Portfolio_API.JobModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Company")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly?>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly?>("StartDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Jobs");
+                });
+
+            modelBuilder.Entity("Portfolio_API.LangModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("JobModelId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobModelId");
+
+                    b.ToTable("Langs");
+                });
+
+            modelBuilder.Entity("Portfolio_API.UserModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,22 +134,22 @@ namespace Portfolio_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("IdentityUser<int>");
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "785b1cd4-12aa-42b9-999c-49a61dea2a0b",
+                            ConcurrencyStamp = "36c6fcaa-b4bc-44c7-a062-0b6db419cb70",
                             Email = "igormarcucci1@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "IGORMARCUCCI1@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEtV0IPgeWMb+xr2RQW/Rf3n19expJf44wYixY8b4GnM0NuY4JWUdEp0ob1NfqpEtw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOwNFnOeA3b0suL1hyfem/zhobtQ4xHRQnO92WEHV68Sl8OyVVrEx8XZnsabVLf16w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f4f9579f-9fa3-4a8c-ba53-310bba7bdf48",
+                            SecurityStamp = "667b6dee-f0e0-43ae-b852-9fca0ad53cc1",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -100,88 +157,13 @@ namespace Portfolio_API.Migrations
 
             modelBuilder.Entity("Portfolio_API.JobModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Company")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("EndDate")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("text");
-
-                    b.Property<string>("StartDate")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("UserModelId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserModelId");
-
-                    b.ToTable("Jobs");
-                });
-
-            modelBuilder.Entity("Portfolio_API.LangModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("JobModelId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobModelId");
-
-                    b.ToTable("Langs");
-                });
-
-            modelBuilder.Entity("Portfolio_API.UserModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserModel");
-                });
-
-            modelBuilder.Entity("Portfolio_API.JobModel", b =>
-                {
-                    b.HasOne("Portfolio_API.UserModel", null)
+                    b.HasOne("Portfolio_API.UserModel", "User")
                         .WithMany("Jobs")
-                        .HasForeignKey("UserModelId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Portfolio_API.LangModel", b =>

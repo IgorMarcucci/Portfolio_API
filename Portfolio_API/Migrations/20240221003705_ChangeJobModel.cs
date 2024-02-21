@@ -7,13 +7,13 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Portfolio_API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class ChangeJobModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "IdentityUser<int>",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -35,22 +35,7 @@ namespace Portfolio_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityUser<int>", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserModel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Username = table.Column<string>(type: "text", nullable: true),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Email = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserModel", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,22 +44,23 @@ namespace Portfolio_API.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: true),
                     Company = table.Column<string>(type: "text", nullable: true),
                     Location = table.Column<string>(type: "text", nullable: true),
-                    StartDate = table.Column<string>(type: "text", nullable: true),
-                    EndDate = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    UserModelId = table.Column<int>(type: "integer", nullable: true)
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Jobs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Jobs_UserModel_UserModelId",
-                        column: x => x.UserModelId,
-                        principalTable: "UserModel",
-                        principalColumn: "Id");
+                        name: "FK_Jobs_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,14 +83,14 @@ namespace Portfolio_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "IdentityUser<int>",
+                table: "Users",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 2, 0, "785b1cd4-12aa-42b9-999c-49a61dea2a0b", "igormarcucci1@gmail.com", true, false, null, "IGORMARCUCCI1@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEEtV0IPgeWMb+xr2RQW/Rf3n19expJf44wYixY8b4GnM0NuY4JWUdEp0ob1NfqpEtw==", null, false, "f4f9579f-9fa3-4a8c-ba53-310bba7bdf48", false, "admin" });
+                values: new object[] { 2, 0, "36c6fcaa-b4bc-44c7-a062-0b6db419cb70", "igormarcucci1@gmail.com", true, false, null, "IGORMARCUCCI1@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEOwNFnOeA3b0suL1hyfem/zhobtQ4xHRQnO92WEHV68Sl8OyVVrEx8XZnsabVLf16w==", null, false, "667b6dee-f0e0-43ae-b852-9fca0ad53cc1", false, "admin" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jobs_UserModelId",
+                name: "IX_Jobs_UserId",
                 table: "Jobs",
-                column: "UserModelId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Langs_JobModelId",
@@ -116,16 +102,13 @@ namespace Portfolio_API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "IdentityUser<int>");
-
-            migrationBuilder.DropTable(
                 name: "Langs");
 
             migrationBuilder.DropTable(
                 name: "Jobs");
 
             migrationBuilder.DropTable(
-                name: "UserModel");
+                name: "Users");
         }
     }
 }

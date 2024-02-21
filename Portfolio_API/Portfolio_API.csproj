@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\DTOs\User\" />
+    <Folder Include="Data\Dtos\User\" />
     <Folder Include="Models\Job\" />
     <Folder Include="Models\Lang\" />
     <Folder Include="Models\User\" />

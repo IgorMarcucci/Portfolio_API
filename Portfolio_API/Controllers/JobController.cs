@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Portfolio_API;
 
+[Route("[controller]")]
+[ApiController]
 public class JobController : ControllerBase
 {
     private readonly IJobService _jobService;
@@ -16,47 +18,58 @@ public class JobController : ControllerBase
     [HttpGet("/jobs")]
     public async Task<IActionResult> GetJobs()
     {
-        List<ReadJobDTO>? jobsDTO = await _jobService.GetJobs();
-        if (jobsDTO == null)
+        List<ReadJobDto>? jobsDto = await _jobService.GetJobs();
+        if (jobsDto == null)
             return NotFound();
-        return Ok(jobsDTO);
+        return Ok(jobsDto);
     }
 
-    [Authorize]
+    // [Authorize]
     [HttpGet("/job/{id}")]
     public async Task<IActionResult> GetJobByIdAsync(int id)
     {
-        ReadJobDTO? jobDTO = await _jobService.GetJobByIdAsync(id);
-        if (jobDTO == null)
+        ReadJobDto? jobDto = await _jobService.GetJobByIdAsync(id);
+        if (jobDto == null)
             return NotFound();
-        return Ok(jobDTO);
+        return Ok(jobDto);
     }
 
-    [Authorize]
+    // [Authorize]
     [HttpPost("/createjob")]
-    public async Task<IActionResult> CreateJobAsync([FromBody] CreateJobDTO createJobDTO)
+    public async Task<IActionResult> CreateJobAsync(CreateJobDto createJobDto)
     {
-        Result result = await _jobService.CreateJobAsync(createJobDTO);
+        Console.WriteLine(createJobDto);
+        Result result = await _jobService.CreateJobAsync(createJobDto);
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);
     }
 
-    [Authorize]
+    // [Authorize]
     [HttpPut("/updatejob/{id}")]
-    public IActionResult UpdateJobAsync(int id, [FromBody] UpdateJobDTO updateJobDTO)
+    public IActionResult UpdateJobAsync(int id, [FromBody] UpdateJobDto updateJobDto)
     {
-        Result result = _jobService.UpdateJobAsync(id, updateJobDTO).Result;
+        Result result = _jobService.UpdateJobAsync(id, updateJobDto).Result;
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);
     }
 
-    [Authorize]
+    // [Authorize]
     [HttpDelete("/deletejob/{id}")]
     public IActionResult DeleteJobAsync(int id)
     {
         Result result = _jobService.DeleteJobAsync(id).Result;
+        if (result.IsSuccess)
+            return Ok(result);
+        return BadRequest(result);
+    }
+
+    // [Authorize]
+    [HttpPut("/applylang/{jobId}/{langId}")]
+    public async Task<IActionResult> AddLangToJobAsync(int jobId, int langId)
+    {
+        Result result = await _jobService.AddLangToJobAsync(jobId, langId);
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);

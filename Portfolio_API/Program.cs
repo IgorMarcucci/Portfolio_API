@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDatabaseContext>(
 builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
-    .AddIdentity<IdentityUser<int>, IdentityRole<int>>(options =>
+    .AddIdentity<UserModel, IdentityRole<int>>(options =>
     {
         options.SignIn.RequireConfirmedEmail = true;
     })

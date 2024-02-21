@@ -12,8 +12,8 @@ using Portfolio_API;
 namespace Portfolio_API.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    [Migration("20240208005643_ChangeUserModel1")]
-    partial class ChangeUserModel1
+    [Migration("20240221010606_ChangeUserModel2")]
+    partial class ChangeUserModel2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,24 +39,24 @@ namespace Portfolio_API.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<string>("EndDate")
-                        .HasColumnType("text");
+                    b.Property<DateOnly?>("EndDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Location")
                         .HasColumnType("text");
 
-                    b.Property<string>("StartDate")
-                        .HasColumnType("text");
+                    b.Property<DateOnly?>("StartDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .HasColumnType("text");
 
-                    b.Property<int?>("UserModelId")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserModelId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Jobs");
                 });
@@ -139,17 +139,17 @@ namespace Portfolio_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 2,
+                            Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "70d74984-b04f-4630-aad2-9759eee05634",
+                            ConcurrencyStamp = "bcaf7b08-8505-427f-9910-fc35e3591e14",
                             Email = "igormarcucci1@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "IGORMARCUCCI1@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBoWniaia6wl+KeY0V3719mX7SzB3q/5hZ3RMB+mEiNbTPnBz4MXq2l8FOYsP/ZBHQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFwotEdftQ2S4vZ5susmLR74e9+REWoqJg+ecwmPdqccJtUHVd+CJqmkl3kSS9D+fw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e3348c3b-3af4-4de9-8edb-fdd617771c0e",
+                            SecurityStamp = "d0445cb5-b30c-4a4c-bfa1-da8442fc1af2",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -157,9 +157,13 @@ namespace Portfolio_API.Migrations
 
             modelBuilder.Entity("Portfolio_API.JobModel", b =>
                 {
-                    b.HasOne("Portfolio_API.UserModel", null)
+                    b.HasOne("Portfolio_API.UserModel", "User")
                         .WithMany("Jobs")
-                        .HasForeignKey("UserModelId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Portfolio_API.LangModel", b =>
