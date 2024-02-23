@@ -34,11 +34,11 @@ public class ApplicationDatabaseContext : DbContext, IDbContext
 
             modelBuilder.Entity<UserModel>().HasData(admin);
 
-            modelBuilder.Entity<UserModel>()
-                .HasMany(u => u.Jobs).WithOne(j => j.User).HasForeignKey(j => j.UserId);
+            // modelBuilder.Entity<UserModel>()
+            //     .HasMany(u => u.Jobs).WithOne(j => j.User).HasForeignKey(j => j.UserId);
             
-            modelBuilder.Entity<JobModel>()
-                .HasMany(j => j.Langs);
+            // modelBuilder.Entity<JobModel>()
+            //     .HasMany(j => j.Langs);
         }
     public DbSet<UserModel> Users { get; set; }
     public DbSet<JobModel> Jobs { get; set; }

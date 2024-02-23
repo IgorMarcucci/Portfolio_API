@@ -9,5 +9,4 @@ public interface IJobService
     public Task<Result> UpdateJobAsync(int id, UpdateJobDto updateJobDto);
     public Task<Result> DeleteJobAsync(int id);
     public Task<ReadJobDto?> GetJobByIdAsync(int id);
-    public Task<Result> AddLangToJobAsync(int jobId, int langId);
 }

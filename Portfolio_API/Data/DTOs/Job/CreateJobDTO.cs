@@ -15,6 +15,4 @@ public class CreateJobDto
     public DateTime? EndDate { get; set; }
     [Required]
     public string? Description { get; set; }
-    [Required]
-    public int UserId { get; set; }
 }

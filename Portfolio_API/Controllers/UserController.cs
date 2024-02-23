@@ -7,7 +7,7 @@ namespace Portfolio_API;
 [ApiController]
 public class UserController : ControllerBase
 {
-    private IUserService _userService;
+    private readonly IUserService _userService;
 
     public UserController(IUserService userService)
     {

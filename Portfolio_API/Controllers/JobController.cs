@@ -64,14 +64,4 @@ public class JobController : ControllerBase
             return Ok(result);
         return BadRequest(result);
     }
-
-    // [Authorize]
-    [HttpPut("/applylang/{jobId}/{langId}")]
-    public async Task<IActionResult> AddLangToJobAsync(int jobId, int langId)
-    {
-        Result result = await _jobService.AddLangToJobAsync(jobId, langId);
-        if (result.IsSuccess)
-            return Ok(result);
-        return BadRequest(result);
-    }
 }

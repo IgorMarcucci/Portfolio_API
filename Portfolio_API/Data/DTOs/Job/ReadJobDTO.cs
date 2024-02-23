@@ -8,6 +8,4 @@ public class ReadJobDto
     public string? Description { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
-    public virtual LangModel[]? Langs { get; set; }
-    public virtual UserModel? User { get; set; }
 }

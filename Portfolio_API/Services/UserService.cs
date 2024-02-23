@@ -30,12 +30,10 @@ public class UserService : IUserService
 
     public async Task<List<ReadUserDto>>? GetUsers()
     {
-         List<UserModel> users = await _userManager.Users
-                .Include(u => u.Jobs)
-                .ToListAsync();
+        List<UserModel> users = await _userManager.Users.ToListAsync();
 
         if (users == null || !users.Any())
-            return null;
+            return new List<ReadUserDto>();
 
         List<ReadUserDto> usersDto = _mapper.Map<List<ReadUserDto>>(users);
         return usersDto;
