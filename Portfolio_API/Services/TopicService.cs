@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Portfolio_API;
 
-public class TopicService
+public class TopicService : ITopicService
 {
     private readonly ApplicationDatabaseContext _db;
     private readonly IMapper _mapper;
@@ -28,19 +28,25 @@ public class TopicService
         return _mapper.Map<ReadTopicDto>(topic) ?? new ReadTopicDto();
     }
 
-    public async Task<ReadTopicDto> CreateTopic(CreateLangDto createLangDto)
+    public async Task<ReadTopicDto> GetTopicByLanguageId(int languageId)
     {
-        var topic = _mapper.Map<TopicModel>(createLangDto);
+        TopicModel? topic = await _db.Topics.FirstOrDefaultAsync(x => x.LangId == languageId);
+        return _mapper.Map<ReadTopicDto>(topic) ?? new ReadTopicDto();
+    }
+
+    public async Task<ReadTopicDto> CreateTopic(CreateTopicDto createTopicDto)
+    {
+        var topic = _mapper.Map<TopicModel>(createTopicDto);
         _db.Topics.Add(topic);
         await _db.SaveChangesAsync();
         return _mapper.Map<ReadTopicDto>(topic);
     }
 
-    public async Task<ReadTopicDto?> UpdateTopic(int id, UpdateLangDto updateLangDto)
+    public async Task<ReadTopicDto?> UpdateTopic(int id, UpdateTopicDto updateTopicDto)
     {
         var topic = await _db.Topics.FirstOrDefaultAsync(x => x.Id == id);
         if (topic == null) return null;
-        _mapper.Map(updateLangDto, topic);
+        _mapper.Map(updateTopicDto, topic);
         await _db.SaveChangesAsync();
         return _mapper.Map<ReadTopicDto>(topic);
     }

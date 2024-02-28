@@ -30,6 +30,14 @@ public class JobService : IJobService
         return _mapper.Map<ReadJobDto>(job) ?? new ReadJobDto();
     }
 
+    public async Task<List<ReadJobDto>> GetJobsByLanguage(int languageId)
+    {
+        List<JobModel>? jobs = await _db.Jobs.Where(x => x.LanguageId == languageId).ToListAsync();
+        List<ReadJobDto> listJobs = _mapper.Map<List<ReadJobDto>>(jobs);
+
+        return listJobs ?? new List<ReadJobDto>();
+    }
+
     public async Task<ReadJobDto> CreateJob(CreateJobDto createJobDto)
     {
         var job = _mapper.Map<JobModel>(createJobDto);

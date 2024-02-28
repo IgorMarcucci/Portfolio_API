@@ -14,29 +14,45 @@ public class ApplicationDatabaseContext : DbContext, IDbContext
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        string? adminEmail = _configuration.GetValue<string>("adminEmail");
+        string? adminPassword = _configuration.GetValue<string>("adminPassword");
+
+        UserModel admin = new UserModel
         {
-            base.OnModelCreating(modelBuilder);
-            string? adminEmail = _configuration.GetValue<string>("adminEmail");
-            string? adminPassword = _configuration.GetValue<string>("adminPassword");
+            UserName = "admin",
+            NormalizedUserName = "ADMIN",
+            Email = adminEmail,
+            NormalizedEmail = adminEmail?.ToUpper(),
+            EmailConfirmed = true,
+            SecurityStamp = Guid.NewGuid().ToString(),
+            Id = 1,
+        };
+        PasswordHasher<UserModel> hasher = new PasswordHasher<UserModel>();
+        admin.PasswordHash = hasher.HashPassword(admin, adminPassword!);
 
-            UserModel admin = new UserModel
-            {
-                UserName = "admin",
-                NormalizedUserName = "ADMIN",
-                Email = adminEmail,
-                NormalizedEmail = adminEmail?.ToUpper(),
-                EmailConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                Id = 1,
-            };
-            PasswordHasher<UserModel> hasher = new PasswordHasher<UserModel>();
-            admin.PasswordHash = hasher.HashPassword(admin, adminPassword!);
+        modelBuilder.Entity<UserModel>().HasData(admin);
 
-            modelBuilder.Entity<UserModel>().HasData(admin);
+        modelBuilder.Entity<TopicModel>()
+            .HasMany(u => u.Techs).WithOne(j => j.Topic).HasForeignKey(j => j.TopicId);
 
-            modelBuilder.Entity<JobModel>()
-                .HasMany(u => u.Projects).WithOne(j => j.Job).HasForeignKey(j => j.JobId);
-        }
+        modelBuilder.Entity<JobModel>()
+            .HasMany(u => u.Projects).WithOne(j => j.Job).HasForeignKey(j => j.JobId);
+        
+        modelBuilder.Entity<LanguageModel>()
+            .HasMany(u => u.Projects).WithOne(j => j.Language).HasForeignKey(j => j.LanguageId);
+
+        modelBuilder.Entity<LanguageModel>()
+            .HasMany(u => u.Jobs).WithOne(j => j.Language).HasForeignKey(j => j.LanguageId);
+        
+        modelBuilder.Entity<LanguageModel>()
+            .HasMany(u => u.Topics).WithOne(j => j.Language).HasForeignKey(j => j.LanguageId);
+        
+        modelBuilder.Entity<LangModel>()
+            .HasMany(u => u.Topics).WithOne(j => j.Lang).HasForeignKey(j => j.LangId);
+    }
+
     public DbSet<UserModel> Users { get; set; }
     public DbSet<JobModel> Jobs { get; set; }
     public DbSet<LangModel> Langs { get; set; }

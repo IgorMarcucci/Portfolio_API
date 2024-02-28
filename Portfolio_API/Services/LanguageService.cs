@@ -28,19 +28,19 @@ public class LanguageService : ILanguageService
         return _mapper.Map<ReadLanguageDto>(language) ?? new ReadLanguageDto();
     }
 
-    public async Task<ReadLanguageDto> CreateLanguage(CreateLangDto createLangDto)
+    public async Task<ReadLanguageDto> CreateLanguage(CreateLanguageDto createLanguageDto)
     {
-        var language = _mapper.Map<LanguageModel>(createLangDto);
+        var language = _mapper.Map<LanguageModel>(createLanguageDto);
         _db.Languages.Add(language);
         await _db.SaveChangesAsync();
         return _mapper.Map<ReadLanguageDto>(language);
     }
 
-    public async Task<ReadLanguageDto?> UpdateLanguage(int id, UpdateLangDto updateLangDto)
+    public async Task<ReadLanguageDto?> UpdateLanguage(int id, UpdateLanguageDto updateLanguageDto)
     {
         var language = await _db.Languages.FirstOrDefaultAsync(x => x.Id == id);
         if (language == null) return null;
-        _mapper.Map(updateLangDto, language);
+        _mapper.Map(updateLanguageDto, language);
         await _db.SaveChangesAsync();
         return _mapper.Map<ReadLanguageDto>(language);
     }

@@ -27,6 +27,10 @@ builder.Services
     .AddScoped<ITokenService, TokenService>()
     .AddScoped<IJobService, JobService>()
     .AddScoped<ILangService, LangService>()
+    .AddScoped<ILanguageService, LanguageService>()
+    .AddScoped<IProjectService, ProjectService>()
+    .AddScoped<ITopicService, TopicService>()
+    .AddScoped<ITechService, TechService>()
     .AddControllers();
 
 builder.Services.AddHttpClient();

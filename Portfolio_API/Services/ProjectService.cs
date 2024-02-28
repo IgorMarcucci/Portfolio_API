@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Portfolio_API;
 
-public class ProjectService
+public class ProjectService : IProjectService
 {
     private readonly ApplicationDatabaseContext _db;
     private readonly IMapper _mapper;
@@ -28,19 +28,27 @@ public class ProjectService
         return _mapper.Map<ReadProjectDto>(project) ?? new ReadProjectDto();
     }
 
-    public async Task<ReadProjectDto> CreateProject(CreateLangDto createLangDto)
+    public async Task<List<ReadProjectDto>> GetProjectsByLanguageId(int languageId)
     {
-        var project = _mapper.Map<ProjectModel>(createLangDto);
+        List<ProjectModel>? projects = await _db.Projects.Where(x => x.LanguageId == languageId).ToListAsync();
+        List<ReadProjectDto> listProjects = _mapper.Map<List<ReadProjectDto>>(projects);
+
+        return listProjects ?? new List<ReadProjectDto>();
+    }
+
+    public async Task<ReadProjectDto> CreateProject(CreateProjectDto createProjectDto)
+    {
+        var project = _mapper.Map<ProjectModel>(createProjectDto);
         _db.Projects.Add(project);
         await _db.SaveChangesAsync();
         return _mapper.Map<ReadProjectDto>(project);
     }
 
-    public async Task<ReadProjectDto?> UpdateProject(int id, UpdateLangDto updateLangDto)
+    public async Task<ReadProjectDto?> UpdateProject(int id, UpdateProjectDto updateProjectDto)
     {
         var project = await _db.Projects.FirstOrDefaultAsync(x => x.Id == id);
         if (project == null) return null;
-        _mapper.Map(updateLangDto, project);
+        _mapper.Map(updateProjectDto, project);
         await _db.SaveChangesAsync();
         return _mapper.Map<ReadProjectDto>(project);
     }

@@ -11,5 +11,5 @@ public class LanguageModel
     [JsonIgnore]
     public virtual List<ProjectModel>? Projects { get; set; }
     [JsonIgnore]
-    public virtual List<TechModel>? Techs { get; set; }
+    public virtual List<TopicModel>? Topics { get; set; }
 }

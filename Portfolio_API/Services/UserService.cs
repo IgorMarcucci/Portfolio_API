@@ -14,8 +14,7 @@ public class UserService : IUserService
     private readonly SignInManager<UserModel> _signInManager;
     private readonly IConfiguration _configuration;
 
-    public UserService(IMapper mapper, UserManager<UserModel> userManager,
-        IEmailService emailService, ITokenService tokenService,
+    public UserService(IMapper mapper, UserManager<UserModel> userManager, ITokenService tokenService,
         SignInManager<UserModel> signInManager,
         IConfiguration configuration)
     {

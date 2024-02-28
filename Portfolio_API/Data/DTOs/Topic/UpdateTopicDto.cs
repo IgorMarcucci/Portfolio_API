@@ -4,4 +4,5 @@ public class UpdateTopicDto
 {
     public string? Name { get; set; }
     public int? LanguageId { get; set; }
+    public int? LangId { get; set; }
 }
