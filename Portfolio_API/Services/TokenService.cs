@@ -10,7 +10,7 @@ namespace Portfolio_API
 {
     public class TokenService : ITokenService
     {
-        public TokenModel CreateToken(IdentityUser<int>? user, string jwtSecret)
+        public TokenModel CreateToken(IdentityUser<int>? user, string jwtPass)
         {
             if (user == null)
             {
@@ -23,12 +23,12 @@ namespace Portfolio_API
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtPass));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(10),
+                expires: DateTime.UtcNow.AddHours(4),
                 signingCredentials: credentials
             );
 

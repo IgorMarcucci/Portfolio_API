@@ -25,7 +25,6 @@ builder.Services
 builder.Services
     .AddScoped<IUserService, UserService>()
     .AddScoped<ITokenService, TokenService>()
-    .AddScoped<IEmailService, EmailService>()
     .AddScoped<IJobService, JobService>()
     .AddScoped<ILangService, LangService>()
     .AddControllers();

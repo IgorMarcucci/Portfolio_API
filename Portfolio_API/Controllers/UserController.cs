@@ -51,12 +51,4 @@ public class UserController : ControllerBase
     {
         return HandleResult(_userService.Login(request));
     }
-
-    [HttpPost("/register")]
-    public IActionResult RegisterUser(CreateUserDto createUserDto)
-    {
-        Result result = _userService.RegisterUser(createUserDto);
-        if (result.IsFailed) return StatusCode(500);
-        return Ok(result);
-    }
 }

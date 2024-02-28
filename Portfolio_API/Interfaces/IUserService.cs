@@ -8,5 +8,4 @@ public interface IUserService
     public ReadUserDto? GetUserById(int id);
     public Task<List<ReadUserDto>>? GetUsers();
     public Task<Result> UpdateUserAsync(int id, UpdateUserDto updateUserDto);
-    public Result RegisterUser(CreateUserDto createUserDto);
 }
