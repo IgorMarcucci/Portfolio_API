@@ -3,25 +3,23 @@ version: '3.1'
 services:
 
   postgresql:
-    container_name: POSTGRES-PORTFOLIO
     image: postgres:12.12
-    ports:
-      - 5432:5432
+    container_name: POSTGRES-PORTFOLIO
     environment:
       POSTGRES_USER: dbuser
       POSTGRES_PASSWORD: dbpassword
-    # restart: unless-stopped
+    ports:
+      - 5432:5432
     volumes:
       - C:\dados\volumes\databases\PORTFOLIO:/var/lib/postgresql/data
   
   pgadmin:
-    container_name: pgadmin-portfolio
     image: dpage/pgadmin4
-    # restart: always
+    container_name: pgadmin-portfolio
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: dbpassword
+      PGADMIN_DEFAULT_EMAIL: pgadmin@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: pgpassword
     ports:
       - 8080:80
-volumes:
-  my-db:
+    volumes:
+      my-db:
