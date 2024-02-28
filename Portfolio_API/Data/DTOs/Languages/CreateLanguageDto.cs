@@ -2,8 +2,8 @@
 
 namespace Portfolio_API;
 
-public class CreateLangDto
-{   
+public class CreateLanguageDto
+{
     [Required]
     public required string Name { get; set; }
 }

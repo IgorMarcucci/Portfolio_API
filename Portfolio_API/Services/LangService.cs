@@ -15,58 +15,44 @@ public class LangService : ILangService
         _mapper = mapper;
     }
 
-    public async Task<List<ReadLangDto>>? GetLangs()
+    public async Task<List<ReadLangDto>> GetAllLangs()
     {
-        List<LangModel> langs = await _db.Langs.ToListAsync();
-
+        List<LangModel>? langs = await _db.Langs.ToListAsync();
         List<ReadLangDto> listLangs = _mapper.Map<List<ReadLangDto>>(langs);
 
-        return listLangs;
+        return listLangs ?? new List<ReadLangDto>();
     }
 
-    public async Task<Result> CreateLangAsync(CreateLangDto createLangDto)
+    public async Task<ReadLangDto> GetLangById(int id)
     {
-        LangModel lang = _mapper.Map<LangModel>(createLangDto);
+        LangModel? lang = await _db.Langs.FirstOrDefaultAsync(x => x.Id == id);
+        return _mapper.Map<ReadLangDto>(lang) ?? new ReadLangDto();
+    }
+
+    public async Task<ReadLangDto> CreateLang(CreateLangDto createLangDto)
+    {
+        var lang = _mapper.Map<LangModel>(createLangDto);
         _db.Langs.Add(lang);
         await _db.SaveChangesAsync();
-        return Result.Ok();
+        return _mapper.Map<ReadLangDto>(lang);
     }
 
-    public async Task<Result> UpdateLangAsync(int id, UpdateLangDto updateLangDto)
+    public async Task<ReadLangDto?> UpdateLang(int id, UpdateLangDto updateLangDto)
     {
-        LangModel lang = await _db.Langs.FindAsync(id);
-        if (lang == null)
-        {
-            return Result.Fail("Lang not found!");
-        }
-
+        var lang = await _db.Langs.FirstOrDefaultAsync(x => x.Id == id);
+        if (lang == null) return null;
         _mapper.Map(updateLangDto, lang);
         await _db.SaveChangesAsync();
-        return Result.Ok();
+        return _mapper.Map<ReadLangDto>(lang);
     }
 
-    public async Task<Result> DeleteLangAsync(int id)
+    public async Task<bool> DeleteLang(int id)
     {
-        LangModel lang = await _db.Langs.FindAsync(id);
-        if (lang == null)
-        {
-            return Result.Fail("Lang not found!");
-        }
-
+        var lang = await _db.Langs.FirstOrDefaultAsync(x => x.Id == id);
+        if (lang == null) return false;
         _db.Langs.Remove(lang);
         await _db.SaveChangesAsync();
-        return Result.Ok();
-    }
-
-    public async Task<ReadLangDto?> GetLangByIdAsync(int id)
-    {
-        LangModel? lang = await _db.Langs.FindAsync(id);
-        if (lang == null)
-        {
-            return null;
-        }
-
-        ReadLangDto ReadLangDto = _mapper.Map<ReadLangDto>(lang);
-        return ReadLangDto;
+        return true;
     }
 }
+

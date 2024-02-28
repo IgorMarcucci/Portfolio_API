@@ -32,9 +32,9 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("/updateUser/{id}")]
-    public IActionResult UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto)
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto)
     {
-        Result result = _userService.UpdateUserAsync(id, updateUserDto).Result;
+        Result result = await _userService.UpdateUserAsync(id, updateUserDto);
         return HandleResult(result);
     }
 

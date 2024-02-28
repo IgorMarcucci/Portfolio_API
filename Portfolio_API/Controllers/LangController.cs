@@ -16,48 +16,48 @@ public class LangController : ControllerBase
     [HttpGet("/langs")]
     public async Task<IActionResult> GetLangs()
     {
-        List<ReadLangDto>? langsDto = await _langService.GetLangs();
+        List<ReadLangDto> langsDto = await _langService.GetAllLangs();
         if (langsDto == null)
             return NotFound();
         return Ok(langsDto);
     }
 
+    [HttpGet("/lang/{id}")]
+    public async Task<IActionResult> GetLangById(int id)
+    {
+        ReadLangDto? langDto = await _langService.GetLangById(id);
+        if (langDto == null)
+            return NotFound();
+        return Ok(langDto);
+    }
+
     // [Authorize]
     [HttpPost("/createlang")]
-    public async Task<IActionResult> CreateLangAsync([FromBody] CreateLangDto createLangDto)
+    public async Task<IActionResult> CreateLang([FromBody] CreateLangDto createLangDto)
     {
-        Result result = await _langService.CreateLangAsync(createLangDto);
-        if (result.IsSuccess)
+        ReadLangDto result = await _langService.CreateLang(createLangDto);
+        if (result != null)
             return Ok(result);
         return BadRequest(result);
     }
 
     // [Authorize]
     [HttpPut("/updatelang/{id}")]
-    public async Task<IActionResult> UpdateLangAsync(int id, [FromBody] UpdateLangDto updateLangDto)
+    public async Task<IActionResult> UpdateLang(int id, [FromBody] UpdateLangDto updateLangDto)
     {
-        Result result = await _langService.UpdateLangAsync(id, updateLangDto);
-        if (result.IsSuccess)
+        ReadLangDto? result = await _langService.UpdateLang(id, updateLangDto);
+        if (result != null)
             return Ok(result);
         return BadRequest(result);
     }
 
     // [Authorize]
     [HttpDelete("/deletelang/{id}")]
-    public async Task<IActionResult> DeleteLangAsync(int id)
+    public async Task<IActionResult> DeleteLang(int id)
     {
-        Result result = await _langService.DeleteLangAsync(id);
-        if (result.IsSuccess)
+        bool result = await _langService.DeleteLang(id);
+        if (result)
             return Ok(result);
         return BadRequest(result);
-    }
-
-    [HttpGet("/lang/{id}")]
-    public async Task<IActionResult> GetLangByIdAsync(int id)
-    {
-        ReadLangDto? langDto = await _langService.GetLangByIdAsync(id);
-        if (langDto == null)
-            return NotFound();
-        return Ok(langDto);
     }
 }

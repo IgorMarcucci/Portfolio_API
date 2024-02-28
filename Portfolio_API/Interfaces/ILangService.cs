@@ -4,9 +4,9 @@ namespace Portfolio_API;
 
 public interface ILangService
 {
-    public Task<List<ReadLangDto>>? GetLangs();
-    public Task<ReadLangDto?> GetLangByIdAsync(int id);
-    public Task<Result> CreateLangAsync(CreateLangDto createLangDto);
-    public Task<Result> UpdateLangAsync(int id, UpdateLangDto updateLangDto);
-    public Task<Result> DeleteLangAsync(int id);
+    Task<List<ReadLangDto>> GetAllLangs();
+    Task<ReadLangDto> GetLangById(int id);
+    Task<ReadLangDto> CreateLang(CreateLangDto createLangDto);
+    Task<ReadLangDto?> UpdateLang(int id, UpdateLangDto updateLangDto);
+    Task<bool> DeleteLang(int id);
 }

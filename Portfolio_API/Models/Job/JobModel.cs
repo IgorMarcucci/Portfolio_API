@@ -6,6 +6,7 @@ namespace Portfolio_API;
 public class JobModel
 {
     public int Id { get; set; }
+    public int LanguageId { get; set; }
     public string? Title { get; set; }
     public string? Company { get; set; }
     public string? Location { get; set; }
@@ -14,4 +15,6 @@ public class JobModel
     public string? Description { get; set; }
     [JsonIgnore]
     public virtual List<ProjectModel>? Projects { get; set; }
+    [JsonIgnore]
+    public virtual LanguageModel? Language { get; set; }
 }

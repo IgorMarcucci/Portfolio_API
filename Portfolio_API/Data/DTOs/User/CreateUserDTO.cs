@@ -5,14 +5,14 @@ namespace Portfolio_API;
 public class CreateUserDto
 {
     [Required]
-    public string? Username { get; set; }
+    public required string Username { get; set; }
     [Required]
-    public string? Name { get; set; }
+    public required string Name { get; set; }
     [Required]
-    public string? Email { get; set; }
+    public required string Email { get; set; }
     [Required]
-    public string? Password { get; set; }
+    public required string Password { get; set; }
     [Required]
     [Compare("Password")]
-    public string? PasswordConfirm { get; set; }
+    public required string PasswordConfirm { get; set; }
 }

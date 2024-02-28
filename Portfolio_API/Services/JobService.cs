@@ -16,54 +16,44 @@ public class JobService : IJobService
         _mapper = mapper;
     }
 
-    public async Task<List<ReadJobDto>>? GetJobs()
+    public async Task<List<ReadJobDto>> GetAllJobs()
     {
-        List<JobModel> jobs = await _db.Jobs.ToListAsync();
-
+        List<JobModel>? jobs = await _db.Jobs.ToListAsync();
         List<ReadJobDto> listJobs = _mapper.Map<List<ReadJobDto>>(jobs);
 
-        return listJobs;
+        return listJobs ?? new List<ReadJobDto>();
     }
 
-    public async Task<Result> CreateJobAsync(CreateJobDto createJobDto)
+    public async Task<ReadJobDto> GetJobById(int id)
+    {
+        JobModel? job = await _db.Jobs.FirstOrDefaultAsync(x => x.Id == id);
+        return _mapper.Map<ReadJobDto>(job) ?? new ReadJobDto();
+    }
+
+    public async Task<ReadJobDto> CreateJob(CreateJobDto createJobDto)
     {
         var job = _mapper.Map<JobModel>(createJobDto);
         _db.Jobs.Add(job);
         await _db.SaveChangesAsync();
-        return Result.Ok();
+        return _mapper.Map<ReadJobDto>(job);
     }
 
-    public async Task<Result> UpdateJobAsync(int id, UpdateJobDto updateJobDto)
+    public async Task<ReadJobDto?> UpdateJob(int id, UpdateJobDto updateJobDto)
     {
-        JobModel? job = await _db.Jobs.FindAsync(id);
-        if (job == null)
-        {
-            return Result.Fail("Job not found!");
-        }
-
+        var job = await _db.Jobs.FirstOrDefaultAsync(x => x.Id == id);
+        if (job == null) return null;
         _mapper.Map(updateJobDto, job);
         await _db.SaveChangesAsync();
-        return Result.Ok();
+        return _mapper.Map<ReadJobDto>(job);
     }
 
-    public async Task<Result> DeleteJobAsync(int id)
+    public async Task<bool> DeleteJob(int id)
     {
-        JobModel? job = await _db.Jobs.FindAsync(id);
-        if (job == null)
-        {
-            return Result.Fail("Job not found!");
-        }
-
+        var job = await _db.Jobs.FirstOrDefaultAsync(x => x.Id == id);
+        if (job == null) return false;
         _db.Jobs.Remove(job);
         await _db.SaveChangesAsync();
-        return Result.Ok();
-    }
-
-    public async Task<ReadJobDto?> GetJobByIdAsync(int id)
-    {
-        JobModel? job = await _db.Jobs.FirstOrDefaultAsync(j => j.Id == id);
-        ReadJobDto? jobObject = _mapper.Map<ReadJobDto>(job);
-
-        return jobObject;
+        return true;
     }
 }
+

@@ -2,8 +2,9 @@
 
 namespace Portfolio_API;
 
-public class CreateLangDto
-{   
+public class CreateTechDto
+{
     [Required]
     public required string Name { get; set; }
+    public int? TopicId { get; set; }
 }

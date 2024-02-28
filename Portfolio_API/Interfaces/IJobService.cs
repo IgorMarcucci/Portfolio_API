@@ -4,9 +4,9 @@ namespace Portfolio_API;
 
 public interface IJobService
 {
-    public Task<List<ReadJobDto>>? GetJobs();
-    public Task<Result> CreateJobAsync(CreateJobDto createJobDto);
-    public Task<Result> UpdateJobAsync(int id, UpdateJobDto updateJobDto);
-    public Task<Result> DeleteJobAsync(int id);
-    public Task<ReadJobDto?> GetJobByIdAsync(int id);
+    Task<List<ReadJobDto>> GetAllJobs();
+    Task<ReadJobDto> GetJobById(int id);
+    Task<ReadJobDto> CreateJob(CreateJobDto createJobDto);
+    Task<ReadJobDto?> UpdateJob(int id, UpdateJobDto updateJobDto);
+    Task<bool> DeleteJob(int id);
 }

@@ -18,7 +18,7 @@ public class JobController : ControllerBase
     [HttpGet("/jobs")]
     public async Task<IActionResult> GetJobs()
     {
-        List<ReadJobDto>? jobsDto = await _jobService.GetJobs();
+        List<ReadJobDto> jobsDto = await _jobService.GetAllJobs();
         if (jobsDto == null)
             return NotFound();
         return Ok(jobsDto);
@@ -26,9 +26,9 @@ public class JobController : ControllerBase
 
     // [Authorize]
     [HttpGet("/job/{id}")]
-    public async Task<IActionResult> GetJobByIdAsync(int id)
+    public async Task<IActionResult> GetJobById(int id)
     {
-        ReadJobDto? jobDto = await _jobService.GetJobByIdAsync(id);
+        ReadJobDto jobDto = await _jobService.GetJobById(id);
         if (jobDto == null)
             return NotFound();
         return Ok(jobDto);
@@ -36,31 +36,31 @@ public class JobController : ControllerBase
 
     // [Authorize]
     [HttpPost("/createjob")]
-    public async Task<IActionResult> CreateJobAsync(CreateJobDto createJobDto)
+    public async Task<IActionResult> CreateJob(CreateJobDto createJobDto)
     {
         Console.WriteLine(createJobDto);
-        Result result = await _jobService.CreateJobAsync(createJobDto);
-        if (result.IsSuccess)
+        ReadJobDto result = await _jobService.CreateJob(createJobDto);
+        if (result != null)
             return Ok(result);
         return BadRequest(result);
     }
 
     // [Authorize]
     [HttpPut("/updatejob/{id}")]
-    public IActionResult UpdateJobAsync(int id, [FromBody] UpdateJobDto updateJobDto)
+    public async Task<IActionResult> UpdateJob(int id, [FromBody] UpdateJobDto updateJobDto)
     {
-        Result result = _jobService.UpdateJobAsync(id, updateJobDto).Result;
-        if (result.IsSuccess)
+        ReadJobDto? result = await _jobService.UpdateJob(id, updateJobDto);
+        if (result != null)
             return Ok(result);
         return BadRequest(result);
     }
 
     // [Authorize]
     [HttpDelete("/deletejob/{id}")]
-    public IActionResult DeleteJobAsync(int id)
+    public async Task<IActionResult> DeleteJob(int id)
     {
-        Result result = _jobService.DeleteJobAsync(id).Result;
-        if (result.IsSuccess)
+        bool? result = await _jobService.DeleteJob(id);
+        if (result == true)
             return Ok(result);
         return BadRequest(result);
     }

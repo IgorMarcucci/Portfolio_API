@@ -34,13 +34,14 @@ public class ApplicationDatabaseContext : DbContext, IDbContext
 
             modelBuilder.Entity<UserModel>().HasData(admin);
 
-            // modelBuilder.Entity<UserModel>()
-            //     .HasMany(u => u.Jobs).WithOne(j => j.User).HasForeignKey(j => j.UserId);
-            
-            // modelBuilder.Entity<JobModel>()
-            //     .HasMany(j => j.Langs);
+            modelBuilder.Entity<JobModel>()
+                .HasMany(u => u.Projects).WithOne(j => j.Job).HasForeignKey(j => j.JobId);
         }
     public DbSet<UserModel> Users { get; set; }
     public DbSet<JobModel> Jobs { get; set; }
     public DbSet<LangModel> Langs { get; set; }
+    public DbSet<LanguageModel> Languages { get; set; }
+    public DbSet<ProjectModel> Projects { get; set; }
+    public DbSet<TechModel> Techs { get; set; }
+    public DbSet<TopicModel> Topics { get; set; }
 }
