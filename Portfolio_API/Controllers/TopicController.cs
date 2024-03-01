@@ -29,8 +29,17 @@ public class TopicController : ControllerBase
         return Ok(topicDto);
     }
 
+    [HttpGet("/topics/language/{id}")]
+    public async Task<IActionResult> GetTopicsByLanguageId(int id)
+    {
+        List<ReadTopicDto> topicsDto = await _topicService.GetTopicsByLanguageId(id);
+        if (topicsDto == null)
+            return NotFound();
+        return Ok(topicsDto);
+    }
+
     // [Authorize]
-    [HttpPost("/createtopic")]
+    [HttpPost("/createTopic")]
     public async Task<IActionResult> CreateTopic([FromBody] CreateTopicDto createTopicDto)
     {
         ReadTopicDto result = await _topicService.CreateTopic(createTopicDto);
@@ -40,7 +49,7 @@ public class TopicController : ControllerBase
     }
 
     // [Authorize]
-    [HttpPut("/updatetopic/{id}")]
+    [HttpPut("/updateTopic/{id}")]
     public async Task<IActionResult> UpdateTopic(int id, [FromBody] UpdateTopicDto updateTopicDto)
     {
         ReadTopicDto? result = await _topicService.UpdateTopic(id, updateTopicDto);
@@ -50,7 +59,7 @@ public class TopicController : ControllerBase
     }
 
     // [Authorize]
-    [HttpDelete("/deletetopic/{id}")]
+    [HttpDelete("/deleteTopic/{id}")]
     public async Task<IActionResult> DeleteTopic(int id)
     {
         bool result = await _topicService.DeleteTopic(id);

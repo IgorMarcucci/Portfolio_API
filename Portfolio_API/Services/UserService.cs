@@ -56,12 +56,12 @@ public class UserService : IUserService
             ?? throw new ArgumentNullException("JwtPass not found");
 
         var identityResult = _signInManager
-            .PasswordSignInAsync(request.Email, request.Password, false, false);
+            .PasswordSignInAsync(request.Username, request.Password, false, false);
         if (identityResult.Result.Succeeded)
         {
             UserModel? identityUser = _signInManager.
-                UserManager.Users.FirstOrDefault(u => u.Email
-                == request.Email);
+                UserManager.Users.FirstOrDefault(u => u.UserName
+                == request.Username);
             TokenModel? token = _tokenService.CreateToken(identityUser, jwtPass);
             return Result.Ok().WithSuccess(token.Value);
         }

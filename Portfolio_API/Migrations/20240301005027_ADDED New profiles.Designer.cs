@@ -12,8 +12,8 @@ using Portfolio_API;
 namespace Portfolio_API.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    [Migration("20240228232317_ChangeModels and add services")]
-    partial class ChangeModelsandaddservices
+    [Migration("20240301005027_ADDED New profiles")]
+    partial class ADDEDNewprofiles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -236,15 +236,15 @@ namespace Portfolio_API.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7940b9db-4a45-45d5-ac1f-422aace9deb6",
+                            ConcurrencyStamp = "c643e81f-5f69-42bf-b30c-d470f4c6a590",
                             Email = "igormarcucci1@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "IGORMARCUCCI1@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAECEJaPZw1yxqChojEC9p210aE7G8lXePJRKb/ABLDzsmEuQHq1weVuFKjs3QqKsUaQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKFRtDHA1J4Id+LaRWZQcKmoPAW+Mqxm2P4oP/Vx99XZ+LkuJkazn/Qy7SfpAeruXQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f619319e-f563-47a4-9eac-ed0a221688bf",
+                            SecurityStamp = "8a0b2edd-ae07-4329-b882-52ed887f6a17",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });

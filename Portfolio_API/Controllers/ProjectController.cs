@@ -30,7 +30,27 @@ public class ProjectController : ControllerBase
         return Ok(projectDto);
     }
 
-    [HttpPost("/createproject")]
+    // [Authorize]
+    [HttpGet("/projects/language/{id}")]
+    public async Task<IActionResult> GetProjectsByLanguageId(int id)
+    {
+        List<ReadProjectDto> projectsDto = await _projectService.GetProjectsByLanguageId(id);
+        if (projectsDto == null)
+            return NotFound();
+        return Ok(projectsDto);
+    }
+
+    // [Authorize]
+    [HttpGet("/projects/job/{id}")]
+    public async Task<IActionResult> GetProjectsByJobId(int id)
+    {
+        List<ReadProjectDto> projectsDto = await _projectService.GetProjectsByJobId(id);
+        if (projectsDto == null)
+            return NotFound();
+        return Ok(projectsDto);
+    }
+
+    [HttpPost("/createProject")]
     public async Task<IActionResult> CreateProject([FromBody] CreateProjectDto createProjectDto)
     {
         ReadProjectDto result = await _projectService.CreateProject(createProjectDto);
@@ -39,7 +59,17 @@ public class ProjectController : ControllerBase
         return BadRequest(result);
     }
 
-    [HttpPut("/updateproject/{id}")]
+    // [Authorize]
+    [HttpPut("/addLangToProject/{projectId}/{langId}")]
+    public async Task<IActionResult> AddLangToProject(int projectId, int langId)
+    {
+        ReadProjectDto result = await _projectService.AddLangToProject(projectId, langId);
+        if (result != null)
+            return Ok(result);
+        return BadRequest(result);
+    }
+
+    [HttpPut("/updateProject/{id}")]
     public async Task<IActionResult> UpdateProject(int id, [FromBody] UpdateProjectDto updateProjectDto)
     {
         ReadProjectDto? result = await _projectService.UpdateProject(id, updateProjectDto);
@@ -48,7 +78,7 @@ public class ProjectController : ControllerBase
         return BadRequest(result);
     }
 
-    [HttpDelete("/deleteproject/{id}")]
+    [HttpDelete("/deleteProject/{id}")]
     public async Task<IActionResult> DeleteProject(int id)
     {
         bool result = await _projectService.DeleteProject(id);

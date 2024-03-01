@@ -16,7 +16,7 @@ public class ProjectService : IProjectService
 
     public async Task<List<ReadProjectDto>> GetAllProjects()
     {
-        List<ProjectModel>? projects = await _db.Projects.ToListAsync();
+        List<ProjectModel>? projects = await _db.Projects.Include(x => x.Job).Include(x => x.Language).ToListAsync();
         List<ReadProjectDto> listProjects = _mapper.Map<List<ReadProjectDto>>(projects);
 
         return listProjects ?? new List<ReadProjectDto>();
@@ -24,15 +24,22 @@ public class ProjectService : IProjectService
 
     public async Task<ReadProjectDto> GetProjectById(int id)
     {
-        ProjectModel? project = await _db.Projects.FirstOrDefaultAsync(x => x.Id == id);
+        ProjectModel? project = await _db.Projects.Include(x => x.Job).Include(x => x.Language).FirstOrDefaultAsync(x => x.Id == id);
         return _mapper.Map<ReadProjectDto>(project) ?? new ReadProjectDto();
     }
 
     public async Task<List<ReadProjectDto>> GetProjectsByLanguageId(int languageId)
     {
-        List<ProjectModel>? projects = await _db.Projects.Where(x => x.LanguageId == languageId).ToListAsync();
+        List<ProjectModel>? projects = await _db.Projects.Include(x => x.Job).Where(x => x.LanguageId == languageId).ToListAsync();
         List<ReadProjectDto> listProjects = _mapper.Map<List<ReadProjectDto>>(projects);
 
+        return listProjects ?? new List<ReadProjectDto>();
+    }
+
+    public async Task<List<ReadProjectDto>> GetProjectsByJobId(int jobId)
+    {
+        List<ProjectModel>? projects = await _db.Projects.Include(x => x.Language).Where(x => x.JobId == jobId).ToListAsync();
+        List<ReadProjectDto> listProjects = _mapper.Map<List<ReadProjectDto>>(projects);
         return listProjects ?? new List<ReadProjectDto>();
     }
 
@@ -40,6 +47,16 @@ public class ProjectService : IProjectService
     {
         var project = _mapper.Map<ProjectModel>(createProjectDto);
         _db.Projects.Add(project);
+        await _db.SaveChangesAsync();
+        return _mapper.Map<ReadProjectDto>(project);
+    }
+
+    public async Task<ReadProjectDto> AddLangToProject(int projectId, int langId)
+    {
+        var project = await _db.Projects.Include(x => x.Langs).FirstOrDefaultAsync(x => x.Id == projectId);
+        var lang = await _db.Langs.FirstOrDefaultAsync(x => x.Id == langId);
+        if (project == null || lang == null) return new ReadProjectDto();
+        project. = lang;
         await _db.SaveChangesAsync();
         return _mapper.Map<ReadProjectDto>(project);
     }

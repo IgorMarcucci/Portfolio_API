@@ -5,7 +5,7 @@ namespace Portfolio_API;
 public class CreateProjectDto
 {
     [Required]
-    public required string Name { get; set; }
+    public required string Title { get; set; }
     [Required]
     public required int LanguageId { get; set; }
     [Required]

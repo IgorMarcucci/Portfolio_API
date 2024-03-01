@@ -42,15 +42,17 @@ public class ApplicationDatabaseContext : DbContext, IDbContext
         
         modelBuilder.Entity<LanguageModel>()
             .HasMany(u => u.Projects).WithOne(j => j.Language).HasForeignKey(j => j.LanguageId);
-
-        modelBuilder.Entity<LanguageModel>()
-            .HasMany(u => u.Jobs).WithOne(j => j.Language).HasForeignKey(j => j.LanguageId);
         
         modelBuilder.Entity<LanguageModel>()
             .HasMany(u => u.Topics).WithOne(j => j.Language).HasForeignKey(j => j.LanguageId);
         
         modelBuilder.Entity<LangModel>()
             .HasMany(u => u.Topics).WithOne(j => j.Lang).HasForeignKey(j => j.LangId);
+
+        modelBuilder.Entity<JobModel>()
+            .HasOne(j => j.Language)
+            .WithMany(l => l.Jobs)  
+            .HasForeignKey(j => j.LanguageId);
     }
 
     public DbSet<UserModel> Users { get; set; }

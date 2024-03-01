@@ -34,8 +34,17 @@ public class JobController : ControllerBase
         return Ok(jobDto);
     }
 
+    [HttpGet("/jobs/language/{id}")]
+    public async Task<IActionResult> GetJobsByLanguageId(int id)
+    {
+        List<ReadJobDto> jobsDto = await _jobService.GetJobsByLanguageId(id);
+        if (jobsDto == null)
+            return NotFound();
+        return Ok(jobsDto);
+    }
+
     // [Authorize]
-    [HttpPost("/createjob")]
+    [HttpPost("/createJob")]
     public async Task<IActionResult> CreateJob(CreateJobDto createJobDto)
     {
         Console.WriteLine(createJobDto);
@@ -46,7 +55,7 @@ public class JobController : ControllerBase
     }
 
     // [Authorize]
-    [HttpPut("/updatejob/{id}")]
+    [HttpPut("/updateJob/{id}")]
     public async Task<IActionResult> UpdateJob(int id, [FromBody] UpdateJobDto updateJobDto)
     {
         ReadJobDto? result = await _jobService.UpdateJob(id, updateJobDto);
@@ -56,7 +65,7 @@ public class JobController : ControllerBase
     }
 
     // [Authorize]
-    [HttpDelete("/deletejob/{id}")]
+    [HttpDelete("/deleteJob/{id}")]
     public async Task<IActionResult> DeleteJob(int id)
     {
         bool? result = await _jobService.DeleteJob(id);

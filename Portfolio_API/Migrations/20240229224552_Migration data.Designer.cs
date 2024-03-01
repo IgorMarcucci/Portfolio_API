@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Portfolio_API;
@@ -11,9 +12,11 @@ using Portfolio_API;
 namespace Portfolio_API.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    partial class ApplicationDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240229224552_Migration data")]
+    partial class Migrationdata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,15 +236,15 @@ namespace Portfolio_API.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c643e81f-5f69-42bf-b30c-d470f4c6a590",
+                            ConcurrencyStamp = "a928b533-83d1-4418-b07a-76e787d1738c",
                             Email = "igormarcucci1@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "IGORMARCUCCI1@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKFRtDHA1J4Id+LaRWZQcKmoPAW+Mqxm2P4oP/Vx99XZ+LkuJkazn/Qy7SfpAeruXQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMNoswaWKel3615K9eB+QKlUR50GwjDJUFzX1+yQnG/1JDyk8m2Y9waMtmkLKOEYSQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8a0b2edd-ae07-4329-b882-52ed887f6a17",
+                            SecurityStamp = "e480f439-44a3-4b05-8983-e974d8aef093",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });

@@ -30,7 +30,7 @@ public class TechController : ControllerBase
     }
 
     // [Authorize]
-    [HttpPost("/createtech")]
+    [HttpPost("/createTech")]
     public async Task<IActionResult> CreateTech([FromBody] CreateTechDto createTechDto)
     {
         ReadTechDto result = await _techService.CreateTech(createTechDto);
@@ -40,7 +40,7 @@ public class TechController : ControllerBase
     }
 
     // [Authorize]
-    [HttpPut("/updatetech/{id}")]
+    [HttpPut("/updateTech/{id}")]
     public async Task<IActionResult> UpdateTech(int id, [FromBody] UpdateTechDto updateTechDto)
     {
         ReadTechDto? result = await _techService.UpdateTech(id, updateTechDto);
@@ -50,7 +50,7 @@ public class TechController : ControllerBase
     }
 
     // [Authorize]
-    [HttpDelete("/deletetech/{id}")]
+    [HttpDelete("/deleteTech/{id}")]
     public async Task<IActionResult> DeleteTech(int id)
     {
         bool result = await _techService.DeleteTech(id);

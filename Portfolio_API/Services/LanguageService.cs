@@ -16,7 +16,7 @@ public class LanguageService : ILanguageService
 
     public async Task<List<ReadLanguageDto>> GetAllLanguages()
     {
-        List<LanguageModel>? languages = await _db.Languages.ToListAsync();
+        List<LanguageModel>? languages = await _db.Languages.Include(x => x.Jobs).Include(x => x.Projects).Include(x => x.Topics).ToListAsync();
         List<ReadLanguageDto> listLanguages = _mapper.Map<List<ReadLanguageDto>>(languages);
 
         return listLanguages ?? new List<ReadLanguageDto>();
@@ -24,7 +24,7 @@ public class LanguageService : ILanguageService
 
     public async Task<ReadLanguageDto> GetLanguageById(int id)
     {
-        LanguageModel? language = await _db.Languages.FirstOrDefaultAsync(x => x.Id == id);
+        LanguageModel? language = await _db.Languages.Include(x => x.Jobs).Include(x => x.Projects).Include(x => x.Topics).FirstOrDefaultAsync(x => x.Id == id);
         return _mapper.Map<ReadLanguageDto>(language) ?? new ReadLanguageDto();
     }
 

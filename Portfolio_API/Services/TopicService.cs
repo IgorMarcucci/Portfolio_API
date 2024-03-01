@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace Portfolio_API;
@@ -16,7 +17,7 @@ public class TopicService : ITopicService
 
     public async Task<List<ReadTopicDto>> GetAllTopics()
     {
-        List<TopicModel>? topics = await _db.Topics.ToListAsync();
+        List<TopicModel>? topics = await _db.Topics.Include(x => x.Techs).Include(x => x.Language).ToListAsync();
         List<ReadTopicDto> listTopics = _mapper.Map<List<ReadTopicDto>>(topics);
 
         return listTopics ?? new List<ReadTopicDto>();
@@ -24,8 +25,16 @@ public class TopicService : ITopicService
 
     public async Task<ReadTopicDto> GetTopicById(int id)
     {
-        TopicModel? topic = await _db.Topics.FirstOrDefaultAsync(x => x.Id == id);
+        TopicModel? topic = await _db.Topics.Include(x => x.Techs).Include(x => x.Language).FirstOrDefaultAsync(x => x.Id == id);
         return _mapper.Map<ReadTopicDto>(topic) ?? new ReadTopicDto();
+    }
+
+    public async Task<List<ReadTopicDto>> GetTopicsByLanguageId(int languageId)
+    {
+        List<TopicModel>? topics = await _db.Topics.Include(x => x.Techs).Where(x => x.LangId == languageId).ToListAsync();
+        List<ReadTopicDto> listTopics = _mapper.Map<List<ReadTopicDto>>(topics);
+
+        return listTopics ?? new List<ReadTopicDto>();
     }
 
     public async Task<ReadTopicDto> GetTopicByLanguageId(int languageId)

@@ -30,7 +30,7 @@ public class LanguageController : ControllerBase
     }
 
     // [Authorize]
-    [HttpPost("/createlanguage")]
+    [HttpPost("/createLanguage")]
     public async Task<IActionResult> CreateLanguage([FromBody] CreateLanguageDto createLanguageDto)
     {
         ReadLanguageDto result = await _languageService.CreateLanguage(createLanguageDto);
@@ -40,7 +40,7 @@ public class LanguageController : ControllerBase
     }
 
     // [Authorize]
-    [HttpPut("/updatelanguage/{id}")]
+    [HttpPut("/updateLanguage/{id}")]
     public async Task<IActionResult> UpdateLanguage(int id, [FromBody] UpdateLanguageDto updateLanguageDto)
     {
         ReadLanguageDto? result = await _languageService.UpdateLanguage(id, updateLanguageDto);
@@ -50,7 +50,7 @@ public class LanguageController : ControllerBase
     }
 
     // [Authorize]
-    [HttpDelete("/deletelanguage/{id}")]
+    [HttpDelete("/deleteLanguage/{id}")]
     public async Task<IActionResult> DeleteLanguage(int id)
     {
         bool result = await _languageService.DeleteLanguage(id);

@@ -38,7 +38,7 @@ public class UserController : ControllerBase
         return HandleResult(result);
     }
 
-    [HttpGet("/getuserbyid/{id}")]
+    [HttpGet("/getUserById/{id}")]
     // [Authorize()]
     public IActionResult GetUserByIdAsync(int id)
     {
